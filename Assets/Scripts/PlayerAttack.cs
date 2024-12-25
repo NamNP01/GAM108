@@ -1,35 +1,45 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO.Pipes;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+    // Thành phần Animator để xử lý các hoạt ảnh
     public Animator anim;
+
+    // Các thuộc tính tấn công
     public float attackRange = 0.5f;
     public LayerMask enemyLayers;
-    //public GameObject firePrefab;
-    public GameObject attackPrefab;
-    public GameObject firePoint;
+
+    // Prefab cho đạn và điểm xuất phát của đạn
+    public GameObject boomerangPrefab;
+    public Transform boomerangSpawnPoint;
+
+    // Hướng và tốc độ đạn
     private Vector2 fireDirection;
-    public float fireSpeed = 8;
+    public float boomerangSpeed = 10f;
+    private GameObject activeBoomerang;
+    // Thời gian giữa các lần tấn công
     private float attackTime;
     public float attackTimeDuration = 0f;
-    // Start is called before the first frame update
+
+    // Khởi động khi bắt đầu
     void Start()
     {
+        // Không có thiết lập cụ thể trong Start
     }
 
-    // Update is called once per frame
+    // Cập nhật mỗi khung hình
     void Update()
     {
+        // Giảm dần thời gian giữa các lần tấn công
         if (attackTime > 0)
         {
             attackTime -= Time.deltaTime;
         }
+
+        // Xác định hướng bắn khi nhấn phím A hoặc D
         if (Input.GetKeyDown(KeyCode.A))
         {
             fireDirection = Vector2.left;
@@ -38,38 +48,27 @@ public class NewBehaviourScript : MonoBehaviour
         {
             fireDirection = Vector2.right;
         }
-        if (Input.GetKeyDown(KeyCode.J)&& attackTime <= 0)
+
+        // Thực hiện tấn công khi nhấn phím J và đủ thời gian giữa các lần tấn công
+        if (Input.GetKeyDown(KeyCode.J) && attackTime <= 0)
         {
             Attack();
             attackTime = attackTimeDuration;
         }
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    CastSpell();
-        //}
     }
-    //void CastSpell()
-    //{
-    //    anim.SetTrigger("CastSpell");
-    //    GameObject newBullet = Instantiate(firePrefab, transform.position, Quaternion.identity);
-    //    Rigidbody2D bulletRb = newBullet.GetComponent<Rigidbody2D>();
-    //    if (bulletRb != null)
-    //    {
 
-    //        bulletRb.velocity = fireDirection * fireSpeed;
-    //    }
-    //}
+    // Hàm tấn công
     void Attack()
-    {   
+    {
+        // Kích hoạt hoạt ảnh tấn công
         anim.SetTrigger("Attack");
-        GameObject newBullet = Instantiate(attackPrefab,firePoint.transform.position, Quaternion.identity);
-        Rigidbody2D bulletRb = newBullet.GetComponent<Rigidbody2D>();
-        attackTime = attackTimeDuration;
-        if (bulletRb != null)
-        {
 
-            bulletRb.velocity = fireDirection * fireSpeed;
+        if (activeBoomerang == null)
+        {
+            activeBoomerang = Instantiate(boomerangPrefab, boomerangSpawnPoint.position, Quaternion.identity);
+            Rigidbody2D rb = activeBoomerang.GetComponent<Rigidbody2D>();
+            rb.velocity = new Vector2(boomerangSpeed, 0);
         }
     }
+    
 }
-

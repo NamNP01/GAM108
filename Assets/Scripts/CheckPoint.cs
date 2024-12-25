@@ -1,0 +1,21 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CheckPoint : MonoBehaviour
+{
+    public Animator ani;
+  
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag.Equals("Player"))
+        {
+            ani.SetTrigger("Active");
+            PlayerManager playerManager = collision.gameObject.GetComponent<PlayerManager>();
+            if (playerManager != null)
+            {
+                playerManager.SaveCheckpoint(transform.position);
+            }
+        }
+    }
+}

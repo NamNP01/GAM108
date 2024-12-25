@@ -4,15 +4,20 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - do
-  - re
-  - mi
-  - pha
-  - son
-  - la
-  - si
   - CanJump
-  - Skill
+  - Coin
+  - NextLevel
+  - JumpTrap
+  - Damaged
+  - Ground
+  - CheckPoint
+  - Attack
+  - JumpPad
+  - MovingPlatform
+  - PointJumpAttackEnemies
+  - Ladder
+  - HP
+  - LockKey
   layers:
   - Default
   - TransparentFX
